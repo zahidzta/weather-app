@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
 import type { WeatherData } from "../types"
+import { useSettings } from "../context/SettingContext"
 
 const API_KEY = import.meta.env.VITE_WEATHER_API_KEY
 const BASE_URL = "https://api.weatherapi.com/v1/forecast.json"
 
 export function useWeather(defaultCity: string) {
+    const { settings } = useSettings()
     const [data, setData] = useState<WeatherData | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
@@ -13,7 +15,8 @@ export function useWeather(defaultCity: string) {
         setLoading(true)
         setError(null)
         try {
-            const response = await fetch(`${BASE_URL}?key=${API_KEY}&q=${city}&days=3&aqi=no`)
+            const lang = settings.language || 'es'
+            const response = await fetch(`${BASE_URL}?key=${API_KEY}&q=${city}&days=3&aqi=no&lang=${lang}`)
             if (!response.ok) {
                 throw new Error("City not found. Please try again")
             }
@@ -34,7 +37,7 @@ export function useWeather(defaultCity: string) {
             setError("APY key missing inside .env configuration file")
             setLoading(false)
         }
-    }, [defaultCity])
+    }, [defaultCity, settings.language])
 
     return {data, loading, error, searchCity: fetchWeather}
 }

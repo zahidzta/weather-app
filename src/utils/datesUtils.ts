@@ -1,17 +1,19 @@
-export function getWeekdayName(dateString: string) : string {
+export function getWeekdayName(dateString: string, lang: string = "es") : string {
     const date = new Date(dateString.replace(/-/g, "/"))
-
-    return new Intl.DateTimeFormat("en-US", {weekday: "long"}).format(date)
+    const locale = lang === "es" ? "es-ES" : "en-US"
+    const name = new Intl.DateTimeFormat(locale, {weekday: "long"}).format(date)
+    return name.charAt(0).toUpperCase() + name.slice(1)
 }
 
-export function formatFullDate(dateString: string) : string {
+export function formatFullDate(dateString: string, lang: string = "es") : string {
     const date = new Date(dateString.replace(/-/g, "/"))
-
-    return new Intl.DateTimeFormat("en-US",
+    const locale = lang === "es" ? "es-ES" : "en-US"
+    const name = new Intl.DateTimeFormat(locale,
         {
             weekday: "long",
             month: "short",
             day: "numeric",
             year: "numeric"
         }).format(date)
+    return name.charAt(0).toUpperCase() + name.slice(1)
 }

@@ -16,7 +16,11 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         const savedSettings = localStorage.getItem(STORAGE_KEY)
         if (savedSettings) {
             try {
-                setSettings(JSON.parse(savedSettings))
+                const parsedSettings = JSON.parse(savedSettings)
+                if (!parsedSettings.language) {
+                    parsedSettings.language = "es"
+                }
+                setSettings(parsedSettings)
             } catch (e) {
                 console.error("Failed to parse saved settings:", e)
                 localStorage.removeItem(STORAGE_KEY)
@@ -26,9 +30,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
     const updateSettings = <K extends keyof Settings>(key: K, value: Settings[K]) => {
         let newSettings: Settings
-        
+
         if (key === "metricSystem") {
-            newSettings = value === "metric" ? METRIC_SETTINGS : IMPERIAL_SETTINGS
+            const baseSettings = value === "metric" ? METRIC_SETTINGS : IMPERIAL_SETTINGS
+            newSettings = { ...baseSettings, language: settings.language || "es" }
         } else {
             newSettings = { ...settings, [key]: value }
         }

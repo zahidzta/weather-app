@@ -4,10 +4,13 @@ import iconUnits from '../assets/images/icon-units.svg'
 import iconCheckmark from '../assets/images/icon-checkmark.svg'
 import { useState, useEffect, useRef } from 'react'
 import { useSettings } from '../context/SettingContext'
+import { IoLanguage } from "react-icons/io5"
+import { useTranslation } from '../hooks/useTranslation'
 
 export default function Header() {
 
     const { settings, updateSettings } = useSettings()
+    const { t } = useTranslation()
     const [open, setOpen] = useState(false)
     const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -45,14 +48,22 @@ export default function Header() {
     return (
         <header className="flex items-center justify-between w-full py-6">
             <img src={logo} alt="Weather Now Logo" className="h-10" />
-            <div className="relative" ref={dropdownRef}>
+            <div className="flex items-center gap-3">
+                <button
+                    onClick={() => updateSettings('language', settings.language === 'en' ? 'es' : 'en')}
+                    className="flex items-center justify-center bg-neutral-800/80 border border-neutral-700/50 rounded-md p-2.5 hover:bg-neutral-700/80 active:scale-95 transition-all duration-200 cursor-pointer text-neutral-200"
+                    title={settings.language === 'en' ? 'Switch to Spanish' : 'Cambiar a Inglés'}
+                >
+                    <IoLanguage size={18} />
+                </button>
+                <div className="relative" ref={dropdownRef}>
                 <button
                     onClick={() => setOpen(!open)}
                     className={`flex items-center gap-2 bg-neutral-800/80 border border-neutral-700/50 rounded-md px-4 py-2 hover:bg-neutral-700/80 active:scale-95 transition-all duration-200 cursor-pointer ${open ? 'ring-1 ring-white/90 border-white/90' : ''
                         }`}
                 >
                     <img src={iconUnits} alt="Units Icon" className="w-4 h-4" />
-                    <span className="text-neutral-200 text-sm font-sans font-medium select-none">Units</span>
+                    <span className="text-neutral-200 text-sm font-sans font-medium select-none">{t("units")}</span>
                     <img
                         src={iconDropdown}
                         alt="Dropdown Icon"
@@ -67,12 +78,12 @@ export default function Header() {
                             className="w-full text-left px-3 py-2 bg-transparent border border-white/10 hover:border-white/20 rounded-lg text-neutral-200 text-sm font-sans font-medium transition-colors cursor-pointer select-none"
                             onClick={handleSwitch}
                         >
-                            {settings.metricSystem === 'metric' ? 'Switch to Imperial' : 'Switch to Metric'}
+                            {settings.metricSystem === 'metric' ? t("switch_to_imperial") : t("switch_to_metric")}
                         </button>
 
                         {/* Temperature section */}
                         <div className="flex flex-col gap-1">
-                            <span className="text-neutral-500 text-xs px-3 py-1 font-sans font-medium select-none">Temperature</span>
+                            <span className="text-neutral-500 text-xs px-3 py-1 font-sans font-medium select-none">{t("temperature")}</span>
                             <div className="flex flex-col gap-0.5">
                                 <div 
                                     onClick={() => updateSettings('temperature', 'celsius')}
@@ -82,7 +93,7 @@ export default function Header() {
                                             : 'text-neutral-400 hover:bg-neutral-800/30'
                                     }`}
                                 >
-                                    <span>Celsius (°C)</span>
+                                    <span>{t("celsius")}</span>
                                     {settings.temperature === 'celsius' && (
                                         <img src={iconCheckmark} alt="Checked" className="w-3.5 h-3.5" />
                                     )}
@@ -95,7 +106,7 @@ export default function Header() {
                                             : 'text-neutral-400 hover:bg-neutral-800/30'
                                     }`}
                                 >
-                                    <span>Fahrenheit (°F)</span>
+                                    <span>{t("fahrenheit")}</span>
                                     {settings.temperature === 'fahrenheit' && (
                                         <img src={iconCheckmark} alt="Checked" className="w-3.5 h-3.5" />
                                     )}
@@ -107,7 +118,7 @@ export default function Header() {
 
                         {/* Wind Speed section */}
                         <div className="flex flex-col gap-1">
-                            <span className="text-neutral-500 text-xs px-3 py-1 font-sans font-medium select-none">Wind Speed</span>
+                            <span className="text-neutral-500 text-xs px-3 py-1 font-sans font-medium select-none">{t("wind_speed")}</span>
                             <div className="flex flex-col gap-0.5">
                                 <div 
                                     onClick={() => updateSettings('windSpeed', 'kmh')}
@@ -117,7 +128,7 @@ export default function Header() {
                                             : 'text-neutral-400 hover:bg-neutral-800/30'
                                     }`}
                                 >
-                                    <span>km/h</span>
+                                    <span>{t("kmh")}</span>
                                     {settings.windSpeed === 'kmh' && (
                                         <img src={iconCheckmark} alt="Checked" className="w-3.5 h-3.5" />
                                     )}
@@ -130,7 +141,7 @@ export default function Header() {
                                             : 'text-neutral-400 hover:bg-neutral-800/30'
                                     }`}
                                 >
-                                    <span>mph</span>
+                                    <span>{t("mph")}</span>
                                     {settings.windSpeed === 'mph' && (
                                         <img src={iconCheckmark} alt="Checked" className="w-3.5 h-3.5" />
                                     )}
@@ -142,7 +153,7 @@ export default function Header() {
 
                         {/* Precipitation section */}
                         <div className="flex flex-col gap-1">
-                            <span className="text-neutral-500 text-xs px-3 py-1 font-sans font-medium select-none">Precipitation</span>
+                            <span className="text-neutral-500 text-xs px-3 py-1 font-sans font-medium select-none">{t("precipitation")}</span>
                             <div className="flex flex-col gap-0.5">
                                 <div 
                                     onClick={() => updateSettings('precipitation', 'millimeters')}
@@ -152,7 +163,7 @@ export default function Header() {
                                             : 'text-neutral-400 hover:bg-neutral-800/30'
                                     }`}
                                 >
-                                    <span>Millimeters (mm)</span>
+                                    <span>{t("millimeters")}</span>
                                     {settings.precipitation === 'millimeters' && (
                                         <img src={iconCheckmark} alt="Checked" className="w-3.5 h-3.5" />
                                     )}
@@ -165,7 +176,7 @@ export default function Header() {
                                             : 'text-neutral-400 hover:bg-neutral-800/30'
                                     }`}
                                 >
-                                    <span>Inches (in)</span>
+                                    <span>{t("inches")}</span>
                                     {settings.precipitation === 'inches' && (
                                         <img src={iconCheckmark} alt="Checked" className="w-3.5 h-3.5" />
                                     )}
@@ -174,6 +185,7 @@ export default function Header() {
                         </div>
                     </div>
                 )}
+            </div>
             </div>
         </header>
     )

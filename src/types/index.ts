@@ -3,6 +3,7 @@ export type Settings = {
     temperature: "celsius" | "fahrenheit"
     windSpeed: "kmh" | "mph"
     precipitation: "millimeters" | "inches"
+    language: "en" | "es"
 }
 
 export type WeatherData = {

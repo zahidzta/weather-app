@@ -6,6 +6,7 @@ import { getWeekdayName } from "../utils/datesUtils"
 import { formatTime } from "../utils/timeUtils"
 import { convertTemperature } from "../utils/convertMetricSystem"
 import { useSettings } from "../context/SettingContext"
+import { useTranslation } from "../hooks/useTranslation"
 
 
 function Skeleton() {
@@ -25,6 +26,7 @@ export default function HourlyForecast() {
 
     const { settings } = useSettings()
     const { data, loading } = useSharedWeather()
+    const { t, language } = useTranslation()
     const days = data?.forecast.forecastday ?? []
     const [activeIdx, setActiveIdx] = useState(0)
 
@@ -37,7 +39,7 @@ export default function HourlyForecast() {
                 {/* Header Section */}
                 <div className="flex items-center justify-between">
                     <h3 className="text-lg md:text-xl font-bold font-display text-neutral-0">
-                        Hourly forecast
+                        {t("hourly_forecast")}
                     </h3>
 
                     {/* Tuesday Dropdown */}
@@ -55,7 +57,7 @@ export default function HourlyForecast() {
                                         key={f.date}
                                         value={index}
                                     >
-                                        {index === 0 ? "Today" : getWeekdayName(f.date)}
+                                        {index === 0 ? t("today") : getWeekdayName(f.date, language)}
                                     </option>
                                 ))
                             }

@@ -5,9 +5,11 @@ import HourlyForecast from "./components/HourlyForecast"
 import SearchBar from "./components/SearchBar"
 import { useSharedWeather } from "./context/WeatherContext"
 import APIError from "./components/APIError"
+import { useTranslation } from "./hooks/useTranslation"
 
 function App() {
   const { error } = useSharedWeather()
+  const { t } = useTranslation()
 
   return (
     <div className="min-h-screen w-full flex justify-center pb-12 selection:bg-blue-500 selection:text-white">
@@ -19,7 +21,7 @@ function App() {
         ) : (
           <>
             <h1 className="text-3xl md:text-5xl font-bold font-display text-neutral-0 text-center mt-10 mb-4 tracking-tight leading-tight max-w-2xl mx-auto">
-              How's the sky looking today?
+              {t("hows_sky")}
             </h1>
             <SearchBar />
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full mt-6 items-start">

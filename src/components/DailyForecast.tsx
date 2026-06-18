@@ -3,7 +3,7 @@ import { useSharedWeather } from "../context/WeatherContext"
 import { convertTemperature } from "../utils/convertMetricSystem"
 import { getWeekdayName } from "../utils/datesUtils"
 import { iconMap } from "../utils/weatherIcons"
-
+import { useTranslation } from "../hooks/useTranslation"
 
 function Skeleton() {
     return (
@@ -30,13 +30,14 @@ function Skeleton() {
 export default function DailyForecast() {
     const { data, loading } = useSharedWeather()
     const { settings } = useSettings()
+    const { t, language } = useTranslation()
 
     const DAILYWEATHER = data?.forecast.forecastday ?? []
 
     return (
         <div className="w-full py-2">
             <h3 className="text-lg md:text-xl font-bold font-display text-neutral-0 mb-4">
-                Daily forecast
+                {t("daily_forecast")}
             </h3>
 
             {/* Scrollable container for mobile responsiveness */}
@@ -50,7 +51,7 @@ export default function DailyForecast() {
                                 className="bg-neutral-800/60 border border-neutral-700/30 rounded-xl py-5 px-3 flex flex-col items-center gap-4 text-center shadow-sm"
                             >
                                 <span className="text-sm font-sans font-medium text-neutral-300">
-                                    {index === 0 ? "Today" : getWeekdayName(day.date)}
+                                    {index === 0 ? t("today") : getWeekdayName(day.date, language)}
                                 </span>
                                 <img
                                     src={iconMap[day.day.condition.code ?? 1000]}

@@ -4,16 +4,18 @@ import { formatFullDate } from "../utils/datesUtils"
 import { iconMap } from "../utils/weatherIcons"
 import { useSettings } from "../context/SettingContext"
 import { convertTemperature, convertWindSpeed, convertPrecipitation } from "../utils/convertMetricSystem"
+import { useTranslation } from "../hooks/useTranslation"
 export default function CurrentWeather() {
 
     const { data, loading } = useSharedWeather()
     const { settings } = useSettings()
+    const { t, language } = useTranslation()
 
     const weatherStats = [
-        { label: 'Feels Like', value: !loading && data ? `${Math.round(convertTemperature(data.current.feelslike_c, settings.temperature))}°${settings.temperature === 'celsius' ? 'C' : 'F'}` : '--' },
-        { label: 'Humidity', value: !loading && data ? `${data.current.humidity}%` : '--' },
-        { label: 'Wind', value: !loading && data ? `${Math.round(convertWindSpeed(data.current.wind_kph, settings.windSpeed) * 10) / 10} ${settings.windSpeed === 'kmh' ? 'km/h' : 'mph'}` : '--' },
-        { label: 'Precipitation', value: !loading && data ? `${Math.round(convertPrecipitation(data.current.precip_mm, settings.precipitation) * 10) / 10} ${settings.precipitation === 'millimeters' ? 'mm' : 'in'}` : '--' }
+        { label: t('feels_like'), value: !loading && data ? `${Math.round(convertTemperature(data.current.feelslike_c, settings.temperature))}°${settings.temperature === 'celsius' ? 'C' : 'F'}` : '--' },
+        { label: t('humidity'), value: !loading && data ? `${data.current.humidity}%` : '--' },
+        { label: t('wind'), value: !loading && data ? `${Math.round(convertWindSpeed(data.current.wind_kph, settings.windSpeed) * 10) / 10} ${settings.windSpeed === 'kmh' ? t('kmh') : t('mph')}` : '--' },
+        { label: t('precipitation'), value: !loading && data ? `${Math.round(convertPrecipitation(data.current.precip_mm, settings.precipitation) * 10) / 10} ${settings.precipitation === 'millimeters' ? 'mm' : 'in'}` : '--' }
     ]
 
     return (
@@ -35,7 +37,7 @@ export default function CurrentWeather() {
 
                         {/* Text Label */}
                         <span className="text-sm font-sans font-medium text-neutral-300 tracking-wide select-none">
-                            Loading...
+                            {t("loading")}
                         </span>
                     </div>
                     :
@@ -55,7 +57,7 @@ export default function CurrentWeather() {
                                     {`${data?.location.name}, ${data?.location.country}`}
                                 </h2>
                                 <p className="text-neutral-200/80 text-xs md:text-sm font-sans mt-1">
-                                    {formatFullDate(data?.forecast.forecastday[0].date ?? "2000-01-01")}
+                                    {formatFullDate(data?.forecast.forecastday[0].date ?? "2000-01-01", language)}
                                 </p>
                             </div>
 

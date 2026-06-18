@@ -1,11 +1,13 @@
 import { useState } from "react"
 import SearchIcon from "../assets/images/icon-search.svg"
 import { useSharedWeather } from "../context/WeatherContext"
+import { useTranslation } from "../hooks/useTranslation"
 
 export default function SearchBar() {
 
     const { searchCity } = useSharedWeather()
     const [search, setSearch] = useState("")
+    const { t } = useTranslation()
 
     return (
         <div className="flex items-center gap-3 w-full max-w-xl mx-auto py-4">
@@ -13,7 +15,7 @@ export default function SearchBar() {
                 <img src={SearchIcon} alt="search" className="w-5 h-5 opacity-60" />
                 <input
                     type="text"
-                    placeholder="Search for a place..."
+                    placeholder={t("search_placeholder")}
                     className="w-full bg-transparent border-none outline-none text-neutral-0 placeholder-neutral-300/50 text-sm font-sans"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
@@ -23,7 +25,7 @@ export default function SearchBar() {
                 className="bg-blue-500 hover:bg-blue-600 active:scale-95 text-neutral-0 font-sans font-semibold text-sm px-6 py-2.5 rounded-md transition-all duration-200 cursor-pointer select-none"
                 onClick={() => searchCity(search)}
             >
-                Search
+                {t("search")}
             </button>
         </div>
     )
